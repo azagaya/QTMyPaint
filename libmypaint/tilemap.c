@@ -19,8 +19,7 @@
 
 #include "tilemap.h"
 
-TileMap *
-tile_map_new(int size, size_t item_size, TileMapItemFreeFunc item_free_func)
+TileMap * tile_map_new(int size, size_t item_size, TileMapItemFreeFunc item_free_func)
 {
     TileMap *self = (TileMap *)malloc(sizeof(TileMap));
 
@@ -28,7 +27,7 @@ tile_map_new(int size, size_t item_size, TileMapItemFreeFunc item_free_func)
     self->item_size = item_size;
     self->item_free_func = item_free_func;
     const int map_size = 2*self->size*2*self->size;
-    self->map = (void**)malloc(map_size*self->item_size);
+    self->map = (void**)malloc(map_size * self->item_size);
     int i;
     for(i = 0; i < map_size; i++) {
         self->map[i] = NULL;
@@ -37,8 +36,7 @@ tile_map_new(int size, size_t item_size, TileMapItemFreeFunc item_free_func)
     return self;
 }
 
-void
-tile_map_free(TileMap *self, gboolean free_items)
+void tile_map_free(TileMap *self, gboolean free_items)
 {
     const int map_size = 2*self->size*2*self->size;
     if (free_items) {
@@ -54,8 +52,7 @@ tile_map_free(TileMap *self, gboolean free_items)
 
 /* Get the data in the tile map for a given tile @index.
  * Must be reentrant and lock-free on different @index */
-void **
-tile_map_get(TileMap *self, TileIndex index)
+void ** tile_map_get(TileMap *self, TileIndex index)
 {
     const int rowstride = self->size*2;
     const int offset = ((self->size + index.y) * rowstride) + self->size + index.x;
@@ -66,8 +63,7 @@ tile_map_get(TileMap *self, TileIndex index)
 
 /* Copy
  * The size of @other must be equal or larger to that of @self */
-void
-tile_map_copy_to(TileMap *self, TileMap *other)
+void tile_map_copy_to(TileMap *self, TileMap *other)
 {
     assert(other->size >= self->size);
 
@@ -82,10 +78,8 @@ tile_map_copy_to(TileMap *self, TileMap *other)
 }
 
 /* Must be reentrant and lock-free on different @index */
-gboolean
-tile_map_contains(TileMap *self, TileIndex index)
+gboolean tile_map_contains(TileMap *self, TileIndex index)
 {
     return (index.x >= -self->size && index.x < self->size
             && index.y >= -self->size && index.y < self->size);
 }
-

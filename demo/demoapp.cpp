@@ -23,7 +23,7 @@ bool DemoApp::event(QEvent *event)
     if (event->type() == QEvent::TabletEnterProximity ||
         event->type() == QEvent::TabletLeaveProximity) {
 
-        m_window->setTabletDevice(static_cast<QTabletEvent *>(event));
+        window->setTabletDevice(static_cast<QTabletEvent *>(event));
 
         return true;
     }
@@ -31,8 +31,8 @@ bool DemoApp::event(QEvent *event)
     return QApplication::event(event);
 }
 
-void DemoApp::setMainWindow(MainWindow* window)
+void DemoApp::setMainWindow(MainWindow *w)
 {
-    m_window = window;
+    window = w;
 }
 

@@ -27,8 +27,7 @@ void reset_null_tile(MyPaintFixedTiledSurface *self)
     memset(self->null_tile, 0, self->tile_size);
 }
 
-static void
-tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
+static void tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
 {
     MyPaintFixedTiledSurface *self = (MyPaintFixedTiledSurface *)tiled_surface;
 
@@ -53,8 +52,7 @@ tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *reque
     request->buffer = tile_pointer;
 }
 
-static void
-tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
+static void tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
 {
     MyPaintFixedTiledSurface *self = (MyPaintFixedTiledSurface *)tiled_surface;
 
@@ -69,26 +67,22 @@ tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request
     }
 }
 
-MyPaintSurface *
-mypaint_fixed_tiled_surface_interface(MyPaintFixedTiledSurface *self)
+MyPaintSurface * mypaint_fixed_tiled_surface_interface(MyPaintFixedTiledSurface *self)
 {
     return (MyPaintSurface *)self;
 }
 
-int
-mypaint_fixed_tiled_surface_get_width(MyPaintFixedTiledSurface *self)
+int mypaint_fixed_tiled_surface_get_width(MyPaintFixedTiledSurface *self)
 {
     return self->width;
 }
 
-int
-mypaint_fixed_tiled_surface_get_height(MyPaintFixedTiledSurface *self)
+int mypaint_fixed_tiled_surface_get_height(MyPaintFixedTiledSurface *self)
 {
     return self->height;
 }
 
-MyPaintFixedTiledSurface *
-mypaint_fixed_tiled_surface_new(int width, int height)
+MyPaintFixedTiledSurface * mypaint_fixed_tiled_surface_new(int width, int height)
 {
     assert(width > 0);
     assert(height > 0);
@@ -142,4 +136,3 @@ void free_simple_tiledsurf(MyPaintSurface *surface)
 
     free(self);
 }
-

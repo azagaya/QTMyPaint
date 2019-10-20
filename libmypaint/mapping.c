@@ -40,12 +40,9 @@ struct _Mapping {
     int inputs;
     ControlPoints * pointsList; // one for each input
     int inputs_used; // optimization
-
 };
 
-
-Mapping *
-mapping_new(int inputs_)
+Mapping * mapping_new(int inputs_)
 {
     Mapping *self = (Mapping *)malloc(sizeof(Mapping));
 
@@ -60,8 +57,7 @@ mapping_new(int inputs_)
     return self;
 }
 
-void
-mapping_free(Mapping *self)
+void mapping_free(Mapping *self)
 {
     free(self->pointsList);
     free(self);
@@ -131,8 +127,7 @@ gboolean mapping_is_constant(Mapping * self)
     return self->inputs_used == 0;
 }
 
-int
-mapping_get_inputs_used_n(Mapping *self)
+int mapping_get_inputs_used_n(Mapping *self)
 {
     return self->inputs_used;
 }

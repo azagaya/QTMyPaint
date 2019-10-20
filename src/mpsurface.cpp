@@ -21,7 +21,7 @@
 
 static void freeTiledSurface(MyPaintSurface *surface)
 {
-    MPSurface *self = (MPSurface *)surface;
+    MPSurface *self = (MPSurface *) surface;
     mypaint_tiled_surface_destroy(self);
 
     free(self->tile_buffer);
@@ -31,25 +31,25 @@ static void freeTiledSurface(MyPaintSurface *surface)
 
 static void defaultUpdateFonction(MPSurface *surface, MPTile *tile)
 {
-    Q_UNUSED(surface);
-    Q_UNUSED(tile);
+    Q_UNUSED(surface)
+    Q_UNUSED(tile)
     // Things to do if no update callback has been affected
 }
 
 static void onTileRequestStart(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
 {
-    MPSurface *self = (MPSurface *)tiled_surface;
+    MPSurface *self = (MPSurface *) tiled_surface;
 
     const int tx = request->tx;
     const int ty = request->ty;
-    uint16_t *tile_pointer = NULL;
+    uint16_t *tile_pointer = nullptr;
 
     if (tx >= self->getTilesWidth() || ty >= self->getTilesHeight() || tx < 0 || ty < 0) {
         // Give it a tile which we will ignore writes to
         tile_pointer = self->null_tile;
     } else {
         MPTile* tile = self->getTileFromIdx(QPoint(tx,ty));
-        tile_pointer = tile ? tile->Bits(false) : NULL;
+        tile_pointer = tile ? tile->Bits(false) : nullptr;
     }
 
     request->buffer = tile_pointer;
@@ -57,13 +57,14 @@ static void onTileRequestStart(MyPaintTiledSurface *tiled_surface, MyPaintTileRe
 
 static void onTileRequestEnd(MyPaintTiledSurface *tiled_surface, MyPaintTileRequest *request)
 {
-    MPSurface *self = (MPSurface *)tiled_surface;
+    MPSurface *self = (MPSurface *) tiled_surface;
 
     const int tx = request->tx;
     const int ty = request->ty;
 
     MPTile* tile = self->getTileFromIdx(QPoint(tx,ty));
-    if (tile) tile->updateCache();
+    if (tile)
+        tile->updateCache();
 
     self->onUpdateTileFunction(self, tile);
 }
@@ -71,22 +72,19 @@ static void onTileRequestEnd(MyPaintTiledSurface *tiled_surface, MyPaintTileRequ
 MPSurface::MPSurface(QSize size)
 {
     // Init callbacks
-    //
-    this->onUpdateTileFunction   = defaultUpdateFonction;
-    this->onNewTileFunction      = defaultUpdateFonction;
+    this->onUpdateTileFunction = defaultUpdateFonction;
+    this->onNewTileFunction = defaultUpdateFonction;
 
     // MPSurface vfuncs
     this->parent.destroy = freeTiledSurface;
 
     resetSurface(size);
 
-
     mypaint_tiled_surface_init((MyPaintTiledSurface *)this, onTileRequestStart, onTileRequestEnd);
 }
 
 MPSurface::~MPSurface()
 {
-
 }
 
 void MPSurface::setOnUpdateTile(MPOnUpdateTileFunction onUpdateFunction)
@@ -108,21 +106,17 @@ void MPSurface::loadImage(const QImage &image)
 {
     QSize tileSize = QSize(MYPAINT_TILE_SIZE, MYPAINT_TILE_SIZE);
 
-    int nbTilesOnWidth = ceil(this->width / tileSize.width());
-    int nbTilesOnHeight = ceil(this->height / tileSize.height());
+    int nbTilesOnWidth = static_cast<int>(ceil(this->width / tileSize.width()));
+    int nbTilesOnHeight = static_cast<int>(ceil(this->height / tileSize.height()));
 
     QImage sourceImage = image.scaled(this->size(), Qt::IgnoreAspectRatio);
 
     for (int h=0; h < nbTilesOnHeight; h++) {
-
         for (int w=0; w < nbTilesOnWidth; w++) {
-
             MPTile *tile = getTileFromIdx(QPoint(w, h));
             QRect tileRect = QRect(tile->pos().toPoint(), tileSize);
             QImage tileImage = sourceImage.copy(tileRect);
-
             tile->setImage(tileImage);
-
             this->onUpdateTileFunction(this, tile);
         }
     }
@@ -147,21 +141,17 @@ void MPSurface::clear()
     while (i.hasNext()) {
         i.next();
         MPTile *tile = i.value();
-        if (tile)
-        {
+        if (tile) {
             // Clear the content of the tile
-            //
             tile->clear();
 
             // Removes blank tile from the scene for output optimization
             //
             // A tile without a scene is not re-created but onNewTile is
             // called when this tile is to be shown again.
-            //
             QGraphicsScene* scene = tile->scene();
-            if (scene) {
+            if (scene)
                 scene->removeItem(tile);
-            }
         }
     }
 
@@ -177,14 +167,12 @@ QImage MPSurface::renderImage()
     QGraphicsScene surfaceScene;
     surfaceScene.setSceneRect(QRect(QPoint(0,0), size()));
 
-
     QHashIterator<QPoint, MPTile*> i(m_Tiles);
     while (i.hasNext()) {
         i.next();
         MPTile *tile = i.value();
-        if (tile)
-        {
-            QGraphicsPixmapItem* item = new QGraphicsPixmapItem( QPixmap::fromImage(tile->image()));
+        if (tile) {
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(tile->image()));
             item->setPos(tile->pos());
             surfaceScene.addItem(item);
         }
@@ -222,7 +210,7 @@ int MPSurface::getHeight()
 
 void MPSurface::resetNullTile()
 {
-    memset(this->null_tile, 0, this->tile_size);
+    memset(this->null_tile, 0, static_cast<size_t>(this->tile_size));
 }
 
 void MPSurface::resetSurface(QSize size)
@@ -235,15 +223,15 @@ void MPSurface::resetSurface(QSize size)
 
     const int tile_size_pixels = MYPAINT_TILE_SIZE;
 
-    const int tiles_width = ceil((float)width / tile_size_pixels);
-    const int tiles_height = ceil((float)height / tile_size_pixels);
+    const int tiles_width = static_cast<int>(ceil(static_cast<float>(width) / tile_size_pixels));
+    const int tiles_height = static_cast<int>(ceil(static_cast<float>(height) / tile_size_pixels));
 
     const size_t tile_size = tile_size_pixels * tile_size_pixels * 4 * sizeof(uint16_t);
-    const size_t buffer_size = tiles_width * tiles_height * tile_size;
+    const size_t buffer_size = static_cast<unsigned long>(tiles_width * tiles_height) * tile_size;
 
     assert(tile_size_pixels*tiles_width >= width);
     assert(tile_size_pixels*tiles_height >= height);
-    assert(buffer_size >= width*height*4*sizeof(uint16_t));
+    assert(buffer_size >= static_cast<unsigned long>(width * height * 4) * sizeof(uint16_t));
 
     uint16_t* buffer = (uint16_t *)malloc(buffer_size);
     if (!buffer)
@@ -268,12 +256,12 @@ MPTile* MPSurface::getTileFromPos(const QPoint& pos)
 MPTile* MPSurface::getTileFromIdx(const QPoint& idx)
 {
 
-    MPTile* selectedTile = NULL;
+    MPTile* selectedTile = nullptr;
     // Which tile index is it ?
-    if (checkIndex(idx.x()) && checkIndex(idx.y())) { // out of range ?
+    if (checkIndex(static_cast<uint>(idx.x())) && checkIndex(static_cast<uint>(idx.y()))) { // out of range ?
 
         // Ok, valid index. Does it exist already ?
-        selectedTile = m_Tiles.value(idx, NULL);
+        selectedTile = m_Tiles.value(idx, nullptr);
 
         if (!selectedTile) {
             // Time to allocate it, update table and insert it as a QGraphicsItem in scene:
@@ -293,7 +281,7 @@ MPTile* MPSurface::getTileFromIdx(const QPoint& idx)
 
 inline bool MPSurface::checkIndex(uint n)
 {
-    return ((int)n<k_max);
+    return (static_cast<int>(n) < k_max);
 }
 
 inline QPoint MPSurface::getTilePos(const QPoint& idx)
@@ -308,5 +296,5 @@ inline QPoint MPSurface::getTileIndex(const QPoint& pos)
 
 inline QPointF MPSurface::getTileFIndex(const QPoint& pos)
 {
-    return QPointF((qreal)pos.x()/MYPAINT_TILE_SIZE, (qreal)pos.y()/MYPAINT_TILE_SIZE);
+    return QPointF(static_cast<qreal>(pos.x()/MYPAINT_TILE_SIZE), static_cast<qreal>(pos.y()/MYPAINT_TILE_SIZE));
 }

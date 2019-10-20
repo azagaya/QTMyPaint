@@ -29,7 +29,7 @@ MypaintView::MypaintView()
     assert(s_view == nullptr);
     s_view = this;
 
-    m_tabletInUse = false;
+    tableInUse = false;
 
     mypaint = MPHandler::handler();
 
@@ -38,8 +38,8 @@ MypaintView::MypaintView()
     connect(mypaint, SIGNAL(clearedSurface(MPSurface*)), this, SLOT(onClearedSurface(MPSurface*)));
 
     // Set scene
-    m_scene.setSceneRect(this->rect());
-    setScene(&m_scene);
+    gScene.setSceneRect(this->rect());
+    setScene(&gScene);
     setAlignment((Qt::AlignLeft | Qt::AlignTop));
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -57,10 +57,10 @@ void MypaintView::setSize(QSize size)
 void MypaintView::setTabletDevice(QTabletEvent* event)
 {
     if (event->type() == QEvent::TabletEnterProximity) {
-        m_tabletInUse = true;
+        tableInUse = true;
     }
     else if(event->type() == QEvent::TabletLeaveProximity) {
-        m_tabletInUse = false;
+        tableInUse = false;
     }
 
     updateCursor(event);
@@ -69,7 +69,7 @@ void MypaintView::setTabletDevice(QTabletEvent* event)
 void MypaintView::onNewTile(MPSurface *surface, MPTile *tile)
 {
     Q_UNUSED(surface)
-    m_scene.addItem(tile);
+    gScene.addItem(tile);
 }
 
 void MypaintView::onUpdateTile(MPSurface *surface, MPTile *tile)
@@ -90,7 +90,7 @@ void MypaintView::loadBrush(const QByteArray &content)
 
 void MypaintView::tabletEvent(QTabletEvent *event)
 {
-    m_tabletInUse = true;
+    tableInUse = true;
 
     switch (event->type()) {
         case QEvent::TabletPress:
@@ -130,7 +130,7 @@ void MypaintView::mouseMoveEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 
-    if (!m_tabletInUse) {
+    if (!tableInUse) {
         QPointF pt = mapToScene(event->pos());
         MPHandler::handler()->strokeTo(static_cast<float>(pt.x()), static_cast<float>(pt.y()));
     }
@@ -142,16 +142,16 @@ void MypaintView::mouseReleaseEvent(QMouseEvent *event)
 
     // Finalize the stroke sequence.
     //
-    //    QImage image = mypaint->renderImage();
-    //    mypaint->clearSurface();
-    //    mypaint->loadImage(image);
+    // QImage image = mypaint->renderImage();
+    // mypaint->clearSurface();
+    // mypaint->loadImage(image);
 }
 
-void MypaintView::btnChgColorPressed()
+void MypaintView::selectColor()
 {
     QPushButton* p_btn = dynamic_cast<QPushButton*>(sender());
     if (p_btn) {
-        QColor newColor = QColorDialog::getColor(m_color, window(), "Select the brush color", QColorDialog::ShowAlphaChannel);
+        QColor newColor = QColorDialog::getColor(color, window(), "Select the brush color", QColorDialog::ShowAlphaChannel);
         if (newColor.isValid()) {
             p_btn->setStyleSheet(QString("color: %1; background-color: %2;").arg((newColor.lightnessF()>0.5)?"black":"white").arg(newColor.name()));
 
@@ -161,7 +161,7 @@ void MypaintView::btnChgColorPressed()
     }
 }
 
-void MypaintView::btnClearPressed()
+void MypaintView::clearCanvas()
 {
     mypaint->clearSurface();
 }
@@ -199,7 +199,7 @@ void MypaintView::updateCursor(const QTabletEvent *event)
             case QTabletEvent::RotationStylus: {
                 QImage origImg(QLatin1String(":/resources/cursor-felt-marker.png"));
                 QImage img(32, 32, QImage::Format_ARGB32);
-                QColor solid = m_color;
+                QColor solid = color;
                 solid.setAlpha(255);
                 img.fill(solid);
 

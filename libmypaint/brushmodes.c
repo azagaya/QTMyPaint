@@ -62,9 +62,7 @@ void draw_dab_pixels_BlendMode_Normal (uint16_t * mask,
     rgba += mask[1];
     mask += 2;
   }
-};
-
-
+}
 
 // Colorize: apply the source hue and saturation, retaining the target
 // brightness. Same thing as in the PDF spec addendum, and upcoming SVG
@@ -99,8 +97,7 @@ static const float LUMA_BLUE_COEFF  = 0.11 * (1<<15);
  * not store premultiplied alpha.
  */
 
-inline static void
-set_rgb16_lum_from_rgb16(const uint16_t topr,
+inline static void set_rgb16_lum_from_rgb16(const uint16_t topr,
                          const uint16_t topg,
                          const uint16_t topb,
                          uint16_t *botr,
@@ -143,14 +140,12 @@ set_rgb16_lum_from_rgb16(const uint16_t topr,
     *botb = b;
 }
 
-
 // The method is an implementation of that described in the official Adobe "PDF
 // Blend Modes: Addendum" document, dated January 23, 2006; specifically it's
 // the "Color" nonseparable blend mode. We do however use different
 // coefficients for the Luma value.
 
-void
-draw_dab_pixels_BlendMode_Color (uint16_t *mask,
+void draw_dab_pixels_BlendMode_Color (uint16_t *mask,
                                  uint16_t *rgba, // b=bottom, premult
                                  uint16_t color_r,  // }
                                  uint16_t color_g,  // }-- a=top, !premult
@@ -188,7 +183,7 @@ draw_dab_pixels_BlendMode_Color (uint16_t *mask,
     rgba += mask[1];
     mask += 2;
   }
-};
+}
 
 // This blend mode is used for smudging and erasing.  Smudging
 // allows to "drag" around transparency as if it was a color.  When
@@ -220,7 +215,7 @@ void draw_dab_pixels_BlendMode_Normal_and_Eraser (uint16_t * mask,
     rgba += mask[1];
     mask += 2;
   }
-};
+}
 
 // This is BlendMode_Normal with locked alpha channel.
 //
@@ -247,8 +242,7 @@ void draw_dab_pixels_BlendMode_LockAlpha (uint16_t * mask,
     rgba += mask[1];
     mask += 2;
   }
-};
-
+}
 
 // Sum up the color/alpha components inside the masked region.
 // Called by get_color().
@@ -295,5 +289,4 @@ void get_color_pixels_accumulate (uint16_t * mask,
   *sum_g += g;
   *sum_b += b;
   *sum_a += a;
-};
-
+}

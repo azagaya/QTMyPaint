@@ -46,17 +46,6 @@ class MypaintView : public QGraphicsView
         void saveToFile(QString filePath);
         void loadFromFile(QString filePath);
 
-    private:
-
-        void updateCursor(const QTabletEvent *event);
-
-        QGraphicsScene m_scene;
-        QColor m_color;
-
-        bool m_tabletInUse;
-
-        MPHandler *mypaint;
-
     protected:
         virtual void tabletEvent(QTabletEvent *event);
         virtual void mouseMoveEvent(QMouseEvent *event);
@@ -65,14 +54,22 @@ class MypaintView : public QGraphicsView
 
     public slots:
         //  void BrushSelected(const QByteArray& content);
-        void btnChgColorPressed();
-        void btnClearPressed();
+        void selectColor();
+        void clearCanvas();
 
         void onNewTile(MPSurface *surface, MPTile *tile);
         void onUpdateTile(MPSurface *surface, MPTile *tile);
         void onClearedSurface(MPSurface *surface);
 
-        void loadBrush(const QByteArray& content);
+        void loadBrush(const QByteArray &content);
+
+    private:
+        void updateCursor(const QTabletEvent *event);
+
+        QGraphicsScene gScene;
+        QColor color;
+        bool tableInUse;
+        MPHandler *mypaint;
 };
 
 #endif // MYPAINTVIEW_H

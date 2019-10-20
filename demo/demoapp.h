@@ -30,10 +30,10 @@ public:
 
     bool event(QEvent* event) Q_DECL_OVERRIDE;
 
-    void setMainWindow(MainWindow *m_window);
+    void setMainWindow(MainWindow *w);
 
 private:
-    MainWindow* m_window;
+    MainWindow* window;
 };
 
 #endif // DEMOAPP_H

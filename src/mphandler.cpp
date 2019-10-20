@@ -23,45 +23,39 @@
 
 #include "libmypaint.c"
 
-#define HAVE_JSON_C;
+#define HAVE_JSON_C
 
 #define DEFAULT_BRUSHES_PATH ":brushes"
 
 bool MPHandler::instanceFlag = false;
-MPHandler* MPHandler::currentHandler = NULL;
+MPHandler* MPHandler::currentHandler = nullptr;
 
-static void
-onUpdatedTile(MPSurface *surface, MPTile *tile)
+static void onUpdatedTile(MPSurface *surface, MPTile *tile)
 {
     MPHandler* handler = MPHandler::handler();
     handler->requestUpdateTile(surface, tile);
 }
 
-static void
-onNewTile(MPSurface *surface, MPTile *tile)
+static void onNewTile(MPSurface *surface, MPTile *tile)
 {
     MPHandler* handler = MPHandler::handler();
     handler->hasNewTile(surface, tile);
 }
 
-static void
-onClearedSurface(MPSurface *surface)
+static void onClearedSurface(MPSurface *surface)
 {
     MPHandler* handler = MPHandler::handler();
     handler->hasClearedSurface(surface);
 }
 
-MPHandler *
-MPHandler::handler()
+MPHandler * MPHandler::handler()
 {
-    if(! instanceFlag)
-    {
+    if (!instanceFlag) {
         currentHandler = new MPHandler();
         instanceFlag = true;
     }
 
     return currentHandler;
-
 }
 
 MPHandler::MPHandler()
@@ -79,17 +73,15 @@ MPHandler::MPHandler()
 
 MPHandler::~MPHandler()
 {
-    mypaint_surface_unref((MyPaintSurface *)m_surface);
+    mypaint_surface_unref((MyPaintSurface *) m_surface);
 }
 
-void
-MPHandler::requestUpdateTile(MPSurface *surface, MPTile *tile)
+void MPHandler::requestUpdateTile(MPSurface *surface, MPTile *tile)
 {
     emit updateTile(surface, tile);
 }
 
-void
-MPHandler::hasNewTile(MPSurface *surface, MPTile *tile)
+void MPHandler::hasNewTile(MPSurface *surface, MPTile *tile)
 {
     emit newTile(surface, tile);
 }
@@ -130,25 +122,23 @@ void MPHandler::loadBrush(const QByteArray &content)
     m_brush->load(content);
 }
 
-void
-MPHandler::strokeTo(float x, float y, float pressure, float xtilt, float ytilt)
+void MPHandler::strokeTo(float x, float y, float pressure, float xtilt, float ytilt)
 {
-    float dtime = 1.0/10;
+    float dtime = static_cast<float>(1.0 / 10);
     mypaint_surface_begin_atomic((MyPaintSurface *)m_surface);
-    mypaint_brush_stroke_to(m_brush->brush, (MyPaintSurface *)m_surface, x, y, pressure, xtilt, ytilt, dtime);
+    mypaint_brush_stroke_to(m_brush->brush, (MyPaintSurface *) m_surface, x, y, pressure,
+                            xtilt, ytilt, static_cast<double>(dtime));
     MyPaintRectangle roi;
     mypaint_surface_end_atomic((MyPaintSurface *)m_surface, &roi);
 }
 
-void
-MPHandler::startStroke()
+void MPHandler::startStroke()
 {
     mypaint_brush_reset (m_brush->brush);
     mypaint_brush_new_stroke(m_brush->brush);
 }
 
-void
-MPHandler::strokeTo(float x, float y)
+void MPHandler::strokeTo(float x, float y)
 {
     float pressure = 1.0;
     float xtilt = 0.0;
@@ -156,10 +146,8 @@ MPHandler::strokeTo(float x, float y)
     strokeTo(x, y, pressure, xtilt, ytilt);
 }
 
-void
-MPHandler::endStroke()
+void MPHandler::endStroke()
 {
-
 }
 
 float MPHandler::getBrushValue(MyPaintBrushSetting setting)
@@ -167,8 +155,7 @@ float MPHandler::getBrushValue(MyPaintBrushSetting setting)
     return this->m_brush->getValue(setting);
 }
 
-void
-MPHandler::setBrushColor(QColor newColor)
+void MPHandler::setBrushColor(QColor newColor)
 {
     this->m_brush->setColor(newColor);
 }

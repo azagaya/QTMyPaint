@@ -35,57 +35,54 @@
 #define QTMYPAINT_SURFACE_HEIGHT 100
 #endif
 
-
 class MPHandler : public QObject
 {
     Q_OBJECT
 
-public:
-    ~MPHandler();
+    public:
+        ~MPHandler();
 
-    static MPHandler *handler();
+        static MPHandler *handler();
 
-    typedef void (*MPOnUpdateFunction) (MPHandler *handler, MPSurface *surface, MPTile *tile);
+        typedef void (*MPOnUpdateFunction) (MPHandler *handler, MPSurface *surface, MPTile *tile);
 
-    void startStroke();
-    void strokeTo(float x, float y, float pressure, float xtilt, float ytilt);
-    void strokeTo(float x, float y);
-    void endStroke();
+        void startStroke();
+        void strokeTo(float x, float y, float pressure, float xtilt, float ytilt);
+        void strokeTo(float x, float y);
+        void endStroke();
 
-    float getBrushValue(MyPaintBrushSetting setting);
+        float getBrushValue(MyPaintBrushSetting setting);
 
-    void setBrushColor(QColor newColor);
-    void setBrushValue(MyPaintBrushSetting setting, float value);
+        void setBrushColor(QColor newColor);
+        void setBrushValue(MyPaintBrushSetting setting, float value);
 
-    void requestUpdateTile(MPSurface *surface, MPTile *tile);
-    void hasNewTile(MPSurface *surface, MPTile *tile);
-    void hasClearedSurface(MPSurface *surface);
+        void requestUpdateTile(MPSurface *surface, MPTile *tile);
+        void hasNewTile(MPSurface *surface, MPTile *tile);
+        void hasClearedSurface(MPSurface *surface);
 
-    void setSurfaceSize(QSize size);
-    QSize surfaceSize();
+        void setSurfaceSize(QSize size);
+        QSize surfaceSize();
 
-    void clearSurface();
-    QImage renderImage();
+        void clearSurface();
+        QImage renderImage();
 
-    void loadImage(const QImage &image);
+        void loadImage(const QImage &image);
 
+    public slots:
+        void loadBrush(const QByteArray& content);
 
-public slots:
-    void loadBrush(const QByteArray& content);
+    signals:
+        void updateTile(MPSurface *surface, MPTile *tile);
+        void newTile(MPSurface *surface, MPTile *tile);
+        void clearedSurface(MPSurface *surface);
 
-private:
-    MPHandler();
-    static bool instanceFlag;
-    static MPHandler *currentHandler;
+    private:
+        MPHandler();
+        static bool instanceFlag;
+        static MPHandler *currentHandler;
 
-    MPBrush *   m_brush;
-    MPSurface * m_surface;
-
-signals:
-    void updateTile(MPSurface *surface, MPTile *tile);
-    void newTile(MPSurface *surface, MPTile *tile);
-    void clearedSurface(MPSurface *surface);
-
+        MPBrush *m_brush;
+        MPSurface *m_surface;
 };
 
 #endif // MPHANDLER_H

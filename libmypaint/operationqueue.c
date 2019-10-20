@@ -30,24 +30,20 @@ struct _OperationQueue {
 };
 
 /* For use with queue_delete */
-void
-operation_delete_func(void *user_data) {
+void operation_delete_func(void *user_data) {
     if (user_data) {
         free(user_data);
     }
 }
 
-
-void
-free_fifo(void *item) {
+void free_fifo(void *item) {
     Fifo *op_queue = (Fifo*)item;
     if (op_queue) {
         fifo_free(op_queue, operation_delete_func);
     }
 }
 
-gboolean
-operation_queue_resize(OperationQueue *self, int new_size)
+gboolean operation_queue_resize(OperationQueue *self, int new_size)
 {
     if (new_size == 0) {
         if (self->tile_map) {
@@ -63,7 +59,7 @@ operation_queue_resize(OperationQueue *self, int new_size)
     } else {
         TileMap *new_tile_map = tile_map_new(new_size, sizeof(Fifo *), free_fifo);
         const int new_map_size = new_size*2*new_size*2;
-        TileIndex *new_dirty_tiles = (TileIndex *)malloc(new_map_size*sizeof(TileIndex));
+        TileIndex *new_dirty_tiles = (TileIndex *)malloc(new_map_size * sizeof(TileIndex));
 
         if (self->tile_map) {
             tile_map_copy_to(self->tile_map, new_tile_map);
@@ -83,8 +79,7 @@ operation_queue_resize(OperationQueue *self, int new_size)
     }
 }
 
-OperationQueue *
-operation_queue_new(void)
+OperationQueue * operation_queue_new(void)
 {
     OperationQueue *self = (OperationQueue *)malloc(sizeof(OperationQueue));
 
@@ -101,22 +96,19 @@ operation_queue_new(void)
     return self;
 }
 
-void
-operation_queue_free(OperationQueue *self)
+void operation_queue_free(OperationQueue *self)
 {
     operation_queue_resize(self, 0); // free the tile map data
 
     free(self);
 }
 
-int
-tile_equal(TileIndex a, TileIndex b)
+int tile_equal(TileIndex a, TileIndex b)
 {
     return (a.x == b.x && a.y == b.y);
 }
 
-size_t
-remove_duplicate_tiles(TileIndex *array, size_t length)
+size_t remove_duplicate_tiles(TileIndex *array, size_t length)
 {
     if (length < 2) {
         // There cannot be any duplicates
@@ -144,8 +136,7 @@ remove_duplicate_tiles(TileIndex *array, size_t length)
  * of tiles, and use operation_queue_pop() to pop all the operations.
  *
  * Concurrency: This function is not thread-safe on the same @self instance. */
-int
-operation_queue_get_dirty_tiles(OperationQueue *self, TileIndex** tiles_out)
+int operation_queue_get_dirty_tiles(OperationQueue *self, TileIndex** tiles_out)
 {
     self->dirty_tiles_n = remove_duplicate_tiles(self->dirty_tiles, self->dirty_tiles_n);
 
@@ -157,8 +148,7 @@ operation_queue_get_dirty_tiles(OperationQueue *self, TileIndex** tiles_out)
  * Consumers should call this after having processed all the tiles.
  *
  * Concurrency: This function is not thread-safe on the same @self instance. */
-void
-operation_queue_clear_dirty_tiles(OperationQueue *self)
+void operation_queue_clear_dirty_tiles(OperationQueue *self)
 {
     // operation_queue_add will overwrite the invalid tiles as new dirty tiles comes in
     self->dirty_tiles_n = 0;
@@ -168,8 +158,7 @@ operation_queue_clear_dirty_tiles(OperationQueue *self)
  * Note: if an operation affects more than one tile, it must be added once per tile.
  *
  * Concurrency: This function is not thread-safe on the same @self instance. */
-void
-operation_queue_add(OperationQueue *self, TileIndex index, OperationDataDrawDab *op)
+void operation_queue_add(OperationQueue *self, TileIndex index, OperationDataDrawDab *op)
 {
     while (!tile_map_contains(self->tile_map, index)) {
 #ifdef HEAVY_DEBUG
@@ -204,8 +193,7 @@ operation_queue_add(OperationQueue *self, TileIndex index, OperationDataDrawDab 
  * The user of this function is reponsible for freeing the result using free()
  *
  * Concurrency: This function is reentrant (and lock-free) on different @index */
-OperationDataDrawDab *
-operation_queue_pop(OperationQueue *self, TileIndex index)
+OperationDataDrawDab * operation_queue_pop(OperationQueue *self, TileIndex index)
 {
     OperationDataDrawDab *op = NULL;
 
@@ -229,8 +217,7 @@ operation_queue_pop(OperationQueue *self, TileIndex index)
     return op;
 }
 
-OperationDataDrawDab *
-operation_queue_peek_first(OperationQueue *self, TileIndex index) {
+OperationDataDrawDab * operation_queue_peek_first(OperationQueue *self, TileIndex index) {
     if (!tile_map_contains(self->tile_map, index)) {
         return NULL;
     }
@@ -239,8 +226,7 @@ operation_queue_peek_first(OperationQueue *self, TileIndex index) {
     return (!op_queue) ? NULL : (OperationDataDrawDab *)fifo_peek_first(op_queue);
 }
 
-OperationDataDrawDab *
-operation_queue_peek_last(OperationQueue *self, TileIndex index) {
+OperationDataDrawDab * operation_queue_peek_last(OperationQueue *self, TileIndex index) {
     if (!tile_map_contains(self->tile_map, index)) {
         return NULL;
     }

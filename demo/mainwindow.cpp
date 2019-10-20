@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->setupUi(this);
 
     // Central widget:
-    mp_view = new MypaintView();
-    setCentralWidget(mp_view);
+    canvas = new MypaintView();
+    setCentralWidget(canvas);
 
     // Add tools:
     QWidget* toolsWidget = new QWidget();
@@ -40,47 +40,46 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     toolsLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     // Open
-    m_openBtn = new QPushButton("Open");
-    toolsLayout->addWidget(m_openBtn);
-    connect(m_openBtn, SIGNAL(pressed()), this, SLOT(btnOpenPressed()));
+    openBtn = new QPushButton("Open");
+    toolsLayout->addWidget(openBtn);
+    connect(openBtn, SIGNAL(pressed()), this, SLOT(openProject()));
 
     // Save
-    m_saveBtn = new QPushButton("Save");
-    toolsLayout->addWidget(m_saveBtn);
-
-    connect(m_saveBtn, SIGNAL(pressed()), this, SLOT(btnSavePressed()));
+    saveBtn = new QPushButton("Save");
+    toolsLayout->addWidget(saveBtn);
+    connect(saveBtn, SIGNAL(pressed()), this, SLOT(saveProject()));
 
     // Clear
-    m_clearBtn = new QPushButton("Clear");
-    toolsLayout->addWidget(m_clearBtn);
-
-    connect(m_clearBtn, SIGNAL(pressed()), mp_view, SLOT(btnClearPressed()));
+    clearBtn = new QPushButton("Clear");
+    toolsLayout->addWidget(clearBtn);
+    connect(clearBtn, SIGNAL(pressed()), canvas, SLOT(clearCanvas()));
 
     // Color selector
-    m_colorBtn = new QPushButton("Click to select another brush color...");
-    m_colorBtn->setMinimumHeight(60);
-    m_colorBtn->setStyleSheet("color: white; background-color: black;");
+    colorBtn = new QPushButton("Click to select another brush color...");
+    colorBtn->setMinimumHeight(60);
+    colorBtn->setStyleSheet("color: white; background-color: black;");
 
-    toolsLayout->addWidget(m_colorBtn);
+    toolsLayout->addWidget(colorBtn);
 
-    connect(m_colorBtn, SIGNAL(pressed()), mp_view, SLOT(btnChgColorPressed()));
+    connect(colorBtn, SIGNAL(pressed()), canvas, SLOT(selectColor()));
 
     toolsWidget->setLayout(toolsLayout);
 
-    QDockWidget* p_dockTools = new QDockWidget("Tools");
-    p_dockTools->setWidget(toolsWidget);
+    QDockWidget* dockTools = new QDockWidget("Tools");
+    dockTools->setWidget(toolsWidget);
 
-    addDockWidget(Qt::RightDockWidgetArea, p_dockTools);
+    addDockWidget(Qt::RightDockWidgetArea, dockTools);
 
     // Add a docked widget
-    QDockWidget* p_dockBrush = new QDockWidget("Brush Library");
-    mp_brushes = new MPBrushSelector(":brushes", nullptr);
-    p_dockBrush->setWidget(mp_brushes);
-    addDockWidget(Qt::RightDockWidgetArea, p_dockBrush);
+    QDockWidget* dockBrush = new QDockWidget("Brush Library");
+    brushesSelector = new MPBrushSelector(":brushes", nullptr);
+    dockBrush->setWidget(brushesSelector);
+    addDockWidget(Qt::RightDockWidgetArea, dockBrush);
 
-    connect(mp_brushes,  SIGNAL(brushSelected(const QByteArray&)), mp_view, SLOT(loadBrush(const QByteArray&)));
+    connect(brushesSelector, SIGNAL(brushSelected(const QByteArray&)),
+            canvas, SLOT(loadBrush(const QByteArray&)));
 
-    m_tabletActive = false;
+    tabletIsActive = false;
 }
 
 MainWindow::~MainWindow()
@@ -90,10 +89,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::setTabletDevice(QTabletEvent* event)
 {
-    mp_view->setTabletDevice(event);
+    canvas->setTabletDevice(event);
 }
 
-void MainWindow::btnOpenPressed()
+void MainWindow::openProject()
 {
     // Path
     QString initPath = QDir::homePath();
@@ -102,10 +101,10 @@ void MainWindow::btnOpenPressed()
     if (filePath.isEmpty())
         return; // false;
 
-    mp_view->loadFromFile(filePath);
+    canvas->loadFromFile(filePath);
 }
 
-void MainWindow::btnSavePressed()
+void MainWindow::saveProject()
 {
     // Path
     QString initPath = QDir::homePath() + "/untitled.png";
@@ -113,11 +112,11 @@ void MainWindow::btnSavePressed()
     if (filePath.isEmpty())
         return; // false;
 
-    mp_view->saveToFile(filePath);
+    canvas->saveToFile(filePath);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
-    mp_view->setSize(this->centralWidget()->rect().size());
+    canvas->setSize(this->centralWidget()->rect().size());
 }

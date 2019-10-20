@@ -35,8 +35,7 @@ float rand_gauss (RngDouble * rng)
 
 // stolen from GIMP (gimpcolorspace.c)
 // (from gimp_rgb_to_hsv)
-void
-rgb_to_hsv_float (float *r_ /*h*/, float *g_ /*s*/, float *b_ /*v*/)
+void rgb_to_hsv_float (float *r_ /*h*/, float *g_ /*s*/, float *b_ /*v*/)
 {
   float max, min, delta;
   float h, s, v;
@@ -91,8 +90,7 @@ rgb_to_hsv_float (float *r_ /*h*/, float *g_ /*s*/, float *b_ /*v*/)
 }
 
 // (from gimp_hsv_to_rgb)
-void
-hsv_to_rgb_float (float *h_, float *s_, float *v_)
+void hsv_to_rgb_float (float *h_, float *s_, float *v_)
 {
   int    i;
   double f, w, q, t;
@@ -110,14 +108,11 @@ hsv_to_rgb_float (float *h_, float *s_, float *v_)
 
   double hue;
 
-  if (s == 0.0)
-    {
+  if (s == 0.0) {
       r = v;
       g = v;
       b = v;
-    }
-  else
-    {
+  } else {
       hue = h;
 
       if (hue == 1.0)
@@ -172,8 +167,7 @@ hsv_to_rgb_float (float *h_, float *s_, float *v_)
 }
 
 // (from gimp_rgb_to_hsl)
-void
-rgb_to_hsl_float (float *r_, float *g_, float *b_)
+void rgb_to_hsl_float(float *r_, float *g_, float *b_)
 {
   double max, min, delta;
 
@@ -237,10 +231,7 @@ rgb_to_hsl_float (float *r_, float *g_, float *b_)
   *b_ = l;
 }
 
-static double
-hsl_value (double n1,
-           double n2,
-           double hue)
+static double hsl_value(double n1, double n2, double hue)
 {
   double val;
 
@@ -269,8 +260,7 @@ hsl_value (double n1,
  *
  * Convert a HSL color value to an RGB color value.
  **/
-void
-hsl_to_rgb_float (float *h_, float *s_, float *l_)
+void hsl_to_rgb_float(float *h_, float *s_, float *l_)
 {
   float h, s, l;
   float r, g, b;
@@ -283,15 +273,12 @@ hsl_to_rgb_float (float *h_, float *s_, float *l_)
   s = CLAMP(s, 0.0, 1.0);
   l = CLAMP(l, 0.0, 1.0);
 
-  if (s == 0)
-    {
+  if (s == 0) {
       /*  achromatic case  */
       r = l;
       g = l;
       b = l;
-    }
-  else
-    {
+  } else {
       double m1, m2;
 
       if (l <= 0.5)
@@ -304,7 +291,7 @@ hsl_to_rgb_float (float *h_, float *s_, float *l_)
       r = hsl_value (m1, m2, h * 6.0 + 2.0);
       g = hsl_value (m1, m2, h * 6.0);
       b = hsl_value (m1, m2, h * 6.0 - 2.0);
-    }
+  }
 
   *h_ = r;
   *s_ = g;

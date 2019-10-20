@@ -35,28 +35,24 @@
 
 #include "brushsettings-gen.h"
 
-const MyPaintBrushSettingInfo *
-mypaint_brush_setting_info(MyPaintBrushSetting id)
+const MyPaintBrushSettingInfo * mypaint_brush_setting_info(MyPaintBrushSetting id)
 {
     assert(id < MYPAINT_BRUSH_SETTINGS_COUNT);
 
     return &settings_info_array[id];
 }
 
-const gchar *
-mypaint_brush_setting_info_get_name(const MyPaintBrushSettingInfo *self)
+const gchar * mypaint_brush_setting_info_get_name(const MyPaintBrushSettingInfo *self)
 {
     return dgettext(GETTEXT_PACKAGE, self->name);
 }
 
-const gchar *
-mypaint_brush_setting_info_get_tooltip(const MyPaintBrushSettingInfo *self)
+const gchar * mypaint_brush_setting_info_get_tooltip(const MyPaintBrushSettingInfo *self)
 {
     return dgettext(GETTEXT_PACKAGE, self->tooltip);
 }
 
-MyPaintBrushSetting
-mypaint_brush_setting_from_cname(const char *cname)
+MyPaintBrushSetting mypaint_brush_setting_from_cname(const char *cname)
 {
     int i;
     for (i=0; i<MYPAINT_BRUSH_SETTINGS_COUNT; i++) {
@@ -68,28 +64,24 @@ mypaint_brush_setting_from_cname(const char *cname)
     return (MyPaintBrushSetting)-1;
 }
 
-const MyPaintBrushInputInfo *
-mypaint_brush_input_info(MyPaintBrushInput id)
+const MyPaintBrushInputInfo * mypaint_brush_input_info(MyPaintBrushInput id)
 {
     assert(id < MYPAINT_BRUSH_INPUTS_COUNT);
 
     return &inputs_info_array[id];
 }
 
-const gchar *
-mypaint_brush_input_info_get_name(const MyPaintBrushInputInfo *self)
+const gchar * mypaint_brush_input_info_get_name(const MyPaintBrushInputInfo *self)
 {
     return dgettext(self->name, GETTEXT_PACKAGE);
 }
 
-const gchar *
-mypaint_brush_input_info_get_tooltip(const MyPaintBrushInputInfo *self)
+const gchar * mypaint_brush_input_info_get_tooltip(const MyPaintBrushInputInfo *self)
 {
     return dgettext(self->tooltip, GETTEXT_PACKAGE);
 }
 
-MyPaintBrushInput
-mypaint_brush_input_from_cname(const char *cname)
+MyPaintBrushInput mypaint_brush_input_from_cname(const char *cname)
 {
     int i;
     for (i=0; i<MYPAINT_BRUSH_INPUTS_COUNT; i++) {

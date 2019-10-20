@@ -35,31 +35,31 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    public:
+        explicit MainWindow(QWidget *parent = nullptr);
+        ~MainWindow();
 
-     void setTabletDevice(QTabletEvent *event);
+         void setTabletDevice(QTabletEvent *event);
 
-public slots:
-    void btnOpenPressed();
-    void btnSavePressed();
+    public slots:
+        void openProject();
+        void saveProject();
 
-protected:
-    void resizeEvent( QResizeEvent *event );
+    protected:
+        void resizeEvent(QResizeEvent *event);
 
-private:
-    Ui::MainWindow *ui;
+    private:
+        Ui::MainWindow *ui;
 
-    MypaintView *mp_view;
-    MPBrushSelector *mp_brushes;
+        MypaintView *canvas;
+        MPBrushSelector *brushesSelector;
 
-    QPushButton *m_colorBtn;
-    QPushButton *m_clearBtn;
-    QPushButton *m_saveBtn;
-    QPushButton *m_openBtn;
+        QPushButton *colorBtn;
+        QPushButton *clearBtn;
+        QPushButton *saveBtn;
+        QPushButton *openBtn;
 
-    bool m_tabletActive;
+        bool tabletIsActive;
 };
 
 #endif // MAINWINDOW_H

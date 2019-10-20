@@ -7,8 +7,7 @@
 #include <stdlib.h>
 
 // Naive conversion code from the internal MyPaint format and 8 bit RGB
-void
-fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length)
+void fix15_to_rgba8(uint16_t *src, uint8_t *dst, int length)
 {
     int i;
     for (i = 0; i < length; i++) {
@@ -48,9 +47,8 @@ typedef void (*LineChunkCallback) (uint16_t *chunk, int chunk_length, void *user
     starting top-left (0,0) and stopping at bottom-right (width-1,height-1)
     callback will be called with linear chunks of horizonal data, up to MYPAINT_TILE_SIZE long
 */
-void
-iterate_over_line_chunks(MyPaintTiledSurface * tiled_surface, int height, int width,
-                         LineChunkCallback callback, void *user_data)
+void iterate_over_line_chunks(MyPaintTiledSurface * tiled_surface, int height, int width,
+                              LineChunkCallback callback, void *user_data)
 {
     const int tile_size = MYPAINT_TILE_SIZE;
     const int number_of_tile_rows = (height/tile_size)+1;
@@ -93,8 +91,7 @@ typedef struct {
     FILE *fp;
 } WritePPMUserData;
 
-static void
-write_ppm_chunk(uint16_t *chunk, int chunk_length, void *user_data)
+static void write_ppm_chunk(uint16_t *chunk, int chunk_length, void *user_data)
 {
     WritePPMUserData data = *(WritePPMUserData *)user_data;
 
@@ -135,4 +132,3 @@ void write_ppm(MyPaintFixedTiledSurface *fixed_surface, char *filepath)
 
     fclose(data.fp);
 }
-

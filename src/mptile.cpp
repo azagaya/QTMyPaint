@@ -39,11 +39,11 @@ QRectF MPTile::boundingRect() const
     return m_cache_img.rect();
 }
 
-//bool MPTile::contains(const QPointF & point) const
-//{
+//  bool MPTile::contains(const QPointF & point) const
+//  {
 //    // opaque if alpha > 16
 //    return qAlpha(m_cache_img.pixel(point.toPoint())) > 0x10;
-//}
+//  }
 
 QPainterPath MPTile::shape() const
 {
@@ -54,8 +54,8 @@ QPainterPath MPTile::shape() const
 
 void MPTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 
     if (!m_cache_valid) 
         updateCache(); // We need to transfer the uint16_t table to the QImage cache
@@ -66,11 +66,10 @@ uint16_t* MPTile::Bits(bool readOnly)
 {
     // Correct C++ way of doing things is using "const" but MyPaint API is not compatible here
     m_cache_valid = readOnly ? m_cache_valid : false;
-    return (uint16_t*)t_pixels;
+    return (uint16_t*) t_pixels;
 }
 
 // debug function (simply replace previous value of pixel in t_pixels)
-//
 void MPTile::drawPoint(uint x, uint y, uint16_t r, uint16_t g, uint16_t b, uint16_t a)
 {
     m_cache_valid = false;
@@ -81,10 +80,9 @@ void MPTile::drawPoint(uint x, uint y, uint16_t r, uint16_t g, uint16_t b, uint1
 }
 
 // Time to transfer the pixels from the uint16 to 32 bits cache before repaint...
-//
 void MPTile::updateCache()
 {
-    QRgb* dst = (QRgb*)m_cache_img.bits();
+    QRgb* dst = (QRgb*) m_cache_img.bits();
     for (int y = 0 ; y < k_tile_dim ; y++) {
          for (int x = 0 ; x < k_tile_dim ; x++) {
               uint16_t alpha = t_pixels[y][x][k_alpha];
@@ -99,8 +97,8 @@ void MPTile::updateCache()
     m_cache_valid = true;
 }
 
-void MPTile::setImage(const QImage &image) {
-
+void MPTile::setImage(const QImage &image)
+{
     QSize tileSize = this->boundingRect().size().toSize();
 
     // Make sure the image has the same dimentions as the tile
@@ -111,10 +109,10 @@ void MPTile::setImage(const QImage &image) {
 
              QRgb pixelColor = m_cache_img.pixel(x, y);
 
-             t_pixels[y][x][k_alpha]    = CONV_8_16(qAlpha(pixelColor));
-             t_pixels[y][x][k_red]      = CONV_8_16(qRed(pixelColor));
-             t_pixels[y][x][k_green]    = CONV_8_16(qGreen(pixelColor));
-             t_pixels[y][x][k_blue]     = CONV_8_16(qBlue(pixelColor));
+             t_pixels[y][x][k_alpha] = static_cast<uint16_t>(CONV_8_16(qAlpha(pixelColor)));
+             t_pixels[y][x][k_red]   = static_cast<uint16_t>(CONV_8_16(qRed(pixelColor)));
+             t_pixels[y][x][k_green] = static_cast<uint16_t>(CONV_8_16(qGreen(pixelColor)));
+             t_pixels[y][x][k_blue]  = static_cast<uint16_t>(CONV_8_16(qBlue(pixelColor)));
 
          }
     }

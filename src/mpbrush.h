@@ -23,27 +23,26 @@
 
 #include "mypaint-brush.h"
 
-
 class MPBrush
 {
-public:
-    MPBrush();
-    ~MPBrush();
+    public:
+        MPBrush();
+        ~MPBrush();
 
-    MyPaintBrush * brush;
+        MyPaintBrush *brush;
 
-    void initBrush();
-    void load(const QByteArray& content);
+        void initBrush();
+        void load(const QByteArray &content);
 
-    QColor getColor();
+        QColor getColor();
 
-    void setColor(QColor newColor);
+        void setColor(QColor newColor);
 
-    float getValue(MyPaintBrushSetting setting);
-    void setValue(MyPaintBrushSetting setting, float value);
+        float getValue(MyPaintBrushSetting setting);
+        void setValue(MyPaintBrushSetting setting, float value);
 
-private:
-    QColor m_color;
+    private:
+        QColor color;
 };
 
 #endif // MPBRUSH_H
