@@ -18,16 +18,16 @@
 */
 
 #include "mainwindow.h"
+#include "rasterapp.h"
+
 #include <QApplication>
-#include "demoapp.h"
 
 int main(int argc, char *argv[])
 {
-    DemoApp app(argc, argv);
+    RasterApp app(argc, argv);
     MainWindow window;
-    window.show();
+    window.showFullScreen();
 
     app.setMainWindow(&window);
-
     return app.exec();
 }

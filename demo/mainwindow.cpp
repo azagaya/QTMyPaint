@@ -27,6 +27,20 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 {
     ui->setupUi(this);
 
+    QAction *openAction = new QAction(tr("&Open"), this);
+    openAction->setShortcuts(QKeySequence::Open);
+    openAction->setStatusTip(tr("Open Image"));
+    connect(openAction, SIGNAL(triggered()), this, SLOT(openProject()));
+
+    QAction *exitAction = new QAction(tr("E&xit"), this);
+    exitAction->setShortcuts(QKeySequence::Quit);
+    exitAction->setStatusTip(tr("Exit the application"));
+    connect(exitAction, &QAction::triggered, this, &QWidget::close);
+
+    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(openAction);
+    fileMenu->addAction(exitAction);
+
     // Central widget:
     canvas = new MypaintView();
     setCentralWidget(canvas);

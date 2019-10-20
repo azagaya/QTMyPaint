@@ -233,7 +233,7 @@ void MPSurface::resetSurface(QSize size)
     assert(tile_size_pixels*tiles_height >= height);
     assert(buffer_size >= static_cast<unsigned long>(width * height * 4) * sizeof(uint16_t));
 
-    uint16_t* buffer = (uint16_t *)malloc(buffer_size);
+    uint16_t* buffer = (uint16_t *) malloc(buffer_size);
     if (!buffer)
         fprintf(stderr, "CRITICAL: unable to allocate enough memory: %Zu bytes", buffer_size);
 
@@ -241,7 +241,7 @@ void MPSurface::resetSurface(QSize size)
 
     this->tile_buffer = buffer;
     this->tile_size = tile_size;
-    this->null_tile = (uint16_t *)malloc(tile_size);
+    this->null_tile = (uint16_t *) malloc(tile_size);
     this->tiles_width = tiles_width;
     this->tiles_height = tiles_height;
 

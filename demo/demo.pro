@@ -7,12 +7,12 @@ TEMPLATE = app
 SOURCES = main.cpp \
           mainwindow.cpp \
           mypaintview.cpp \
-          demoapp.cpp \
+          rasterapp.cpp \
           mpbrushselector.cpp
 
 HEADERS = mainwindow.h \
           mypaintview.h \
-          demoapp.h \
+          rasterapp.h \
           mpbrushselector.h
 
 FORMS += mainwindow.ui

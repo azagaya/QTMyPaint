@@ -58,8 +58,7 @@ void MypaintView::setTabletDevice(QTabletEvent* event)
 {
     if (event->type() == QEvent::TabletEnterProximity) {
         tableInUse = true;
-    }
-    else if(event->type() == QEvent::TabletLeaveProximity) {
+    } else if(event->type() == QEvent::TabletLeaveProximity) {
         tableInUse = false;
     }
 
@@ -110,8 +109,6 @@ void MypaintView::tabletEvent(QTabletEvent *event)
                 QPointF pt(mapToScene(event->pos()));
                 MPHandler::handler()->strokeTo(static_cast<float>(pt.x()), static_cast<float>(pt.y()),
                                                static_cast<float>(event->pressure()), event->xTilt(), event->yTilt());
-                // stroke_to(m_brush, (MyPaintSurface *)m_surface, pt.x(), pt.y(), event->pressure(),
-                // CTILT(event->xTilt()),  CTILT(event->yTilt()));
                 event->accept();
             }
         break;
@@ -139,21 +136,16 @@ void MypaintView::mouseMoveEvent(QMouseEvent *event)
 void MypaintView::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
-
-    // Finalize the stroke sequence.
-    //
-    // QImage image = mypaint->renderImage();
-    // mypaint->clearSurface();
-    // mypaint->loadImage(image);
 }
 
 void MypaintView::selectColor()
 {
-    QPushButton* p_btn = dynamic_cast<QPushButton*>(sender());
-    if (p_btn) {
+    QPushButton* button = dynamic_cast<QPushButton*>(sender());
+    if (button) {
         QColor newColor = QColorDialog::getColor(color, window(), "Select the brush color", QColorDialog::ShowAlphaChannel);
         if (newColor.isValid()) {
-            p_btn->setStyleSheet(QString("color: %1; background-color: %2;").arg((newColor.lightnessF()>0.5)?"black":"white").arg(newColor.name()));
+            button->setStyleSheet(QString("color: %1; background-color: %2;").arg((newColor.lightnessF()>0.5)?"black":"white")
+                                  .arg(newColor.name()));
 
             MPHandler *mypaint = MPHandler::handler();
             mypaint->setBrushColor(newColor);

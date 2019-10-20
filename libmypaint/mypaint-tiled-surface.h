@@ -20,9 +20,8 @@ typedef struct {
     int mipmap_level;
 } MyPaintTileRequest;
 
-void
-mypaint_tile_request_init(MyPaintTileRequest *data, int level,
-                          int tx, int ty, gboolean readonly);
+void mypaint_tile_request_init(MyPaintTileRequest *data, int level,
+                               int tx, int ty, gboolean readonly);
 
 typedef void (*MyPaintTileRequestStartFunction) (struct _MyPaintTiledSurface *self, MyPaintTileRequest *request);
 typedef void (*MyPaintTileRequestEndFunction) (struct _MyPaintTiledSurface *self, MyPaintTileRequest *request);
@@ -48,18 +47,14 @@ struct _MyPaintTiledSurface {
     int tile_size;
 };
 
-void
-mypaint_tiled_surface_init(MyPaintTiledSurface *self,
-                           MyPaintTileRequestStartFunction tile_request_start,
-                           MyPaintTileRequestEndFunction tile_request_end);
+void mypaint_tiled_surface_init(MyPaintTiledSurface *self,
+                                MyPaintTileRequestStartFunction tile_request_start,
+                                MyPaintTileRequestEndFunction tile_request_end);
 
-void
-mypaint_tiled_surface_destroy(MyPaintTiledSurface *self);
+void mypaint_tiled_surface_destroy(MyPaintTiledSurface *self);
 
-void
-mypaint_tiled_surface_set_symmetry_state(MyPaintTiledSurface *self, gboolean active, float center_x);
-float
-mypaint_tiled_surface_get_alpha (MyPaintTiledSurface *self, float x, float y, float radius);
+void mypaint_tiled_surface_set_symmetry_state(MyPaintTiledSurface *self, gboolean active, float center_x);
+float mypaint_tiled_surface_get_alpha (MyPaintTiledSurface *self, float x, float y, float radius);
 
 void mypaint_tiled_surface_tile_request_start(MyPaintTiledSurface *self, MyPaintTileRequest *request);
 void mypaint_tiled_surface_tile_request_end(MyPaintTiledSurface *self, MyPaintTileRequest *request);

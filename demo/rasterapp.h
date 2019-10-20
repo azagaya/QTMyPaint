@@ -16,17 +16,17 @@
     You should have received a copy of the GNU General Public License
     along with QTMyPaint. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DEMOAPP_H
-#define DEMOAPP_H
+#ifndef RASTERAPP_H
+#define RASTERAPP_H
 
 #include <QApplication>
 #include <QTabletEvent>
 #include "mainwindow.h"
 
-class DemoApp : public QApplication
+class RasterApp : public QApplication
 {
 public:
-    DemoApp(int &argc, char **argv): QApplication(argc, argv) {}
+    RasterApp(int &argc, char **argv): QApplication(argc, argv) {}
 
     bool event(QEvent* event) Q_DECL_OVERRIDE;
 

@@ -69,7 +69,7 @@ class MPHandler : public QObject
         void loadImage(const QImage &image);
 
     public slots:
-        void loadBrush(const QByteArray& content);
+        void loadBrush(const QByteArray &content);
 
     signals:
         void updateTile(MPSurface *surface, MPTile *tile);

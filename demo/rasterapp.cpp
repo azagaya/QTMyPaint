@@ -16,9 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with QTMyPaint. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "demoapp.h"
+#include "rasterapp.h"
 
-bool DemoApp::event(QEvent *event)
+bool RasterApp::event(QEvent *event)
 {
     if (event->type() == QEvent::TabletEnterProximity ||
         event->type() == QEvent::TabletLeaveProximity) {
@@ -31,8 +31,7 @@ bool DemoApp::event(QEvent *event)
     return QApplication::event(event);
 }
 
-void DemoApp::setMainWindow(MainWindow *w)
+void RasterApp::setMainWindow(MainWindow *w)
 {
     window = w;
 }
-
