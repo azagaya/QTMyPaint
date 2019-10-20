@@ -36,43 +36,43 @@ class MypaintView : public QGraphicsView
 {
     Q_OBJECT
 
-public:
-    MypaintView();
-    ~MypaintView();
+    public:
+        MypaintView();
+        ~MypaintView();
 
-    void setSize(QSize size);
-    void setTabletDevice(QTabletEvent *event);
+        void setSize(QSize size);
+        void setTabletDevice(QTabletEvent *event);
 
-    void saveToFile(QString filePath);
-    void loadFromFile(QString filePath);
+        void saveToFile(QString filePath);
+        void loadFromFile(QString filePath);
 
-private:
+    private:
 
-    void updateCursor(const QTabletEvent *event);
+        void updateCursor(const QTabletEvent *event);
 
-    QGraphicsScene m_scene;
-    QColor m_color;
+        QGraphicsScene m_scene;
+        QColor m_color;
 
-    bool m_tabletInUse;
+        bool m_tabletInUse;
 
-    MPHandler *mypaint;
+        MPHandler *mypaint;
 
-protected:
-    virtual void tabletEvent(QTabletEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
+    protected:
+        virtual void tabletEvent(QTabletEvent *event);
+        virtual void mouseMoveEvent(QMouseEvent *event);
+        virtual void mousePressEvent(QMouseEvent *event);
+        virtual void mouseReleaseEvent(QMouseEvent *event);
 
-public slots:
-    //  void BrushSelected(const QByteArray& content);
-    void btnChgColorPressed();
-    void btnClearPressed();
+    public slots:
+        //  void BrushSelected(const QByteArray& content);
+        void btnChgColorPressed();
+        void btnClearPressed();
 
-    void onNewTile(MPSurface *surface, MPTile *tile);
-    void onUpdateTile(MPSurface *surface, MPTile *tile);
-    void onClearedSurface(MPSurface *surface);
+        void onNewTile(MPSurface *surface, MPTile *tile);
+        void onUpdateTile(MPSurface *surface, MPTile *tile);
+        void onClearedSurface(MPSurface *surface);
 
-    void loadBrush(const QByteArray& content);
+        void loadBrush(const QByteArray& content);
 };
 
 #endif // MYPAINTVIEW_H

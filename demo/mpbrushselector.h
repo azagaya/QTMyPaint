@@ -33,27 +33,24 @@ class QListWidgetItem;
 class MPBrushSelector : public QTabWidget
 {
 
-  Q_OBJECT
-public:
-  MPBrushSelector( const QString& brushLibPath, QWidget* p_parent = 0 );
+    Q_OBJECT
+    public:
+      MPBrushSelector(const QString& brushLibPath, QWidget* p_parent = nullptr);
 
-  bool isValid() { return !m_brushLib.isEmpty(); }
+      bool isValid() { return !m_brushLib.isEmpty(); }
 
-public slots:
-  void selectBrush(QString brushName = QString()); // Give the brush name (no extension) i.e. : "classic/blend+paint"
+    public slots:
+      void selectBrush(QString brushName = QString()); // Give the brush name (no extension) i.e. : "classic/blend+paint"
 
-signals:
-  void brushSelected (const QByteArray& content);
+    signals:
+      void brushSelected(const QByteArray& content);
 
-protected:
-  QMap<QString, QStringList> m_brushLib;
-  const QString              m_brushesPath;
+    protected:
+      QMap<QString, QStringList> m_brushLib;
+      const QString m_brushesPath;
 
-protected slots:
-  void itemClicked ( QListWidgetItem *);
-
+    protected slots:
+      void itemClicked(QListWidgetItem *);
 };
-
-
 
 #endif // MPBRUSHSELECTOR_H

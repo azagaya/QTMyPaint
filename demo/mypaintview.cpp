@@ -22,11 +22,11 @@
 #include <QPixmap>
 
 #include "mypaintview.h"
-static MypaintView* s_view = NULL;
+static MypaintView* s_view = nullptr;
 
 MypaintView::MypaintView()
 {
-    assert(s_view == NULL);
+    assert(s_view == nullptr);
     s_view = this;
 
     m_tabletInUse = false;
@@ -47,7 +47,6 @@ MypaintView::MypaintView()
 
 MypaintView::~MypaintView()
 {
-
 }
 
 void MypaintView::setSize(QSize size)
@@ -69,19 +68,19 @@ void MypaintView::setTabletDevice(QTabletEvent* event)
 
 void MypaintView::onNewTile(MPSurface *surface, MPTile *tile)
 {
-    Q_UNUSED(surface);
+    Q_UNUSED(surface)
     m_scene.addItem(tile);
 }
 
 void MypaintView::onUpdateTile(MPSurface *surface, MPTile *tile)
 {
-    Q_UNUSED(surface);
+    Q_UNUSED(surface)
     tile->update();
 }
 
 void MypaintView::onClearedSurface(MPSurface *surface)
 {
-    Q_UNUSED(surface);
+    Q_UNUSED(surface)
 }
 
 void MypaintView::loadBrush(const QByteArray &content)
@@ -109,8 +108,10 @@ void MypaintView::tabletEvent(QTabletEvent *event)
         case QEvent::TabletMove:
             if (event->pointerType() == QTabletEvent::Pen) {
                 QPointF pt(mapToScene(event->pos()));
-                MPHandler::handler()->strokeTo(pt.x(), pt.y(), event->pressure(), event->xTilt(),  event->yTilt());
-                // stroke_to(m_brush, (MyPaintSurface *)m_surface, pt.x(), pt.y(), event->pressure(), CTILT(event->xTilt()),  CTILT(event->yTilt()));
+                MPHandler::handler()->strokeTo(static_cast<float>(pt.x()), static_cast<float>(pt.y()),
+                                               static_cast<float>(event->pressure()), event->xTilt(), event->yTilt());
+                // stroke_to(m_brush, (MyPaintSurface *)m_surface, pt.x(), pt.y(), event->pressure(),
+                // CTILT(event->xTilt()),  CTILT(event->yTilt()));
                 event->accept();
             }
         break;
@@ -121,29 +122,29 @@ void MypaintView::tabletEvent(QTabletEvent *event)
 
 void MypaintView::mousePressEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     MPHandler::handler()->startStroke();
 }
 
 void MypaintView::mouseMoveEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
 
     if (!m_tabletInUse) {
         QPointF pt = mapToScene(event->pos());
-        MPHandler::handler()->strokeTo(pt.x(), pt.y());
+        MPHandler::handler()->strokeTo(static_cast<float>(pt.x()), static_cast<float>(pt.y()));
     }
 }
 
 void MypaintView::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
 
     // Finalize the stroke sequence.
     //
-//    QImage image = mypaint->renderImage();
-//    mypaint->clearSurface();
-//    mypaint->loadImage(image);
+    //    QImage image = mypaint->renderImage();
+    //    mypaint->clearSurface();
+    //    mypaint->loadImage(image);
 }
 
 void MypaintView::btnChgColorPressed()
@@ -201,6 +202,7 @@ void MypaintView::updateCursor(const QTabletEvent *event)
                 QColor solid = m_color;
                 solid.setAlpha(255);
                 img.fill(solid);
+
                 QPainter painter(&img);
                 QTransform transform = painter.transform();
                 transform.translate(16, 16);

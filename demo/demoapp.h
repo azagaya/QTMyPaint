@@ -26,7 +26,7 @@
 class DemoApp : public QApplication
 {
 public:
-    DemoApp(int &argc, char **argv) : QApplication(argc, argv) {}
+    DemoApp(int &argc, char **argv): QApplication(argc, argv) {}
 
     bool event(QEvent* event) Q_DECL_OVERRIDE;
 
