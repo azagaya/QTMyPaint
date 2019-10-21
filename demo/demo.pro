@@ -15,7 +15,7 @@ HEADERS = mainwindow.h \
           rasterapp.h \
           mpbrushselector.h
 
-FORMS += mainwindow.ui
+# FORMS += mainwindow.ui
 
 # --- QTMyPaint ---
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../src/release/ -lQTMyPaint

@@ -18,15 +18,16 @@
 */
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+// #include "ui_mainwindow.h"
 
 #include <QFileDialog>
 #include <QVBoxLayout>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
 
-MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
-    ui->setupUi(this);
-
     QAction *openAction = new QAction(tr("&Open"), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open Image"));
@@ -98,7 +99,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 void MainWindow::setTabletDevice(QTabletEvent* event)

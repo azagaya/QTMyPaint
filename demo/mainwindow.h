@@ -27,10 +27,6 @@
 #include "mypaintview.h"
 #include "mpbrushselector.h"
 
-namespace Ui {
-    class MainWindow;
-}
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -49,8 +45,6 @@ class MainWindow : public QMainWindow
         void resizeEvent(QResizeEvent *event);
 
     private:
-        Ui::MainWindow *ui;
-
         MypaintView *canvas;
         MPBrushSelector *brushesSelector;
 
