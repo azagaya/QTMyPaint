@@ -20,6 +20,7 @@
 #include <QGraphicsRectItem>
 #include <QBrush>
 #include <QPixmap>
+#include <QCursor>
 
 #include "mypaintview.h"
 static MypaintView* s_view = nullptr;
@@ -43,6 +44,9 @@ MypaintView::MypaintView()
     setAlignment((Qt::AlignLeft | Qt::AlignTop));
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    QCursor cursor = QCursor(QString("demo/cursor/pencil.png"), 0, 11);
+    viewport()->setCursor(cursor);
 }
 
 MypaintView::~MypaintView()
